@@ -3,10 +3,10 @@
 
 const calculateDistance = (point1, point2) => {
   // первый катет
-  const base = point2[0] - point1[0];
+  const base = point2[0] - point1[0]
   // второй катет
-  const attitude = point2[1] - point1[1];
-  return Math.sqrt(base ** 2 + attitude ** 2);
+  const attitude = point2[1] - point1[1
+  return Math.sqrt(base ** 2 + attitude ** 2)
 };
 
 const point1 = [0, 0];
