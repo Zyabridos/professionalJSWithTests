@@ -6,7 +6,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zyabridos/professionalJS.git"
+    "url": "git+https://github.com/Zyabridos/Leetcode.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
