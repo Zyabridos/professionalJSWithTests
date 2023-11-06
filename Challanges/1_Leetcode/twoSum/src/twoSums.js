@@ -8,4 +8,4 @@ const twoSums = (inputArray, target) => {
   return 'Such combination does not exists in this array';
 };
 
-export default twoSums; 
+export default twoSums;
