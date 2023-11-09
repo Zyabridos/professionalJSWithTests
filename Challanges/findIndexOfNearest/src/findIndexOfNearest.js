@@ -1,6 +1,3 @@
-// разделить число на каждыое число массива
-// отфильтровать или заредьюсить наименьшнн
-
 export default (array, num) => {
   const substracted = array.map((current) => current - num);
   const abs = substracted.map((current) => Math.abs(current));

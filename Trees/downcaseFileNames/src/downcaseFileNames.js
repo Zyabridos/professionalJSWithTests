@@ -17,16 +17,3 @@ const downcaseFileNames = (tree) => {
 };
 
 export default downcaseFileNames;
-
-const tree = mkdir('/', [
-  mkdir('eTc', [
-    mkdir('NgiNx', [], { size: 4000 }),
-    mkdir('CONSUL', [
-      mkfile('config.JSON', { uid: 0 }),
-    ]),
-  ]),
-  mkfile('hOsts'),
-]);
-
-console.log(JSON.stringify(downcaseFileNames(tree)));
-console.log(downcaseFileNames(tree));
