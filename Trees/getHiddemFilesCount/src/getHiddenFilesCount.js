@@ -12,3 +12,5 @@ const getHiddenFilesCount = (tree) => {
   const filesCount = children.map(getHiddenFilesCount);
   return _.sum(filesCount);
 };
+
+export default getHiddenFilesCount;
