@@ -10,21 +10,31 @@ import getGcd from './utils.js';
 
 const makeRational = (numer, denom) => {
   const gcd = getGcd(numer, denom);
-  numer /= gcd;
-  denom /= gcd;
-  return { numer, denom };
+  return { numer: numer / gcd, denom: denom / gcd };
 };
 
-const getNumer = (rationalNum) => {
+const getNumer = (rational) => rational.numer;
+const getDenom = (rational) => rational.denom;
 
+const ratToString = (rat) => `${getNumer(rat)}/${getDenom(rat)}`;
+
+const add = (rat1, rat2) => {
+  const addNumer = (getNumer(rat1) * getDenom(rat2)) + (getNumer(rat2) * getDenom(rat1));
+  const addDibider = getDenom(rat1) * getDenom(rat2);
+  return makeRational(addNumer, addDibider);
 };
-const rat1 = makeRational(3, 9);
-console.log(rat1); // 1/3
-console.log(getNumer(rat1)); // 1
-// console.log(getDenom(rat1)); // 3
 
-// const rat3 = add(rat1, rat2);
-// console.log(ratToString(rat3)); // '11/3'
+const sub = (rat1, rat2) => {
+  const subNumer = (getNumer(rat1) * getDenom(rat2)) - (getNumer(rat2) * getDenom(rat1));
+  const subDibider = getDenom(rat1) * getDenom(rat2);
+  return makeRational(subNumer, subDibider);
+};
 
-// const rat4 = sub(rat1, rat2);
-// console.log(ratToString(rat4)); // '-3/1'
+export {
+  makeRational,
+  getNumer,
+  getDenom,
+  add,
+  sub,
+  ratToString,
+};
