@@ -5,29 +5,23 @@
 
 import _ from 'lodash';
 
-const genDiff = (obj1, obj2) => {
-  const mergedObject = Object.assign(obj1, obj2);
+export default (data1, data2) => {
+  const keys1 = Object.keys(data1);
+  const keys2 = Object.keys(data2);
+  const keys = _.union(keys1, keys2);
+
   const result = {};
-  const entriesObj1 = Object.entries(obj1);
-  const keysObj1 = Object.keys(obj1);
-  const entriesObj2 = Object.entries(obj2);
-  const keysObj2 = Object.keys(obj2);
-  return _.pick(obj1, keysObj1);
+  for (const key of keys) {
+    if (!Object.hasOwn(data1, key)) {
+      result[key] = 'added';
+    } else if (!Object.hasOwn(data2, key)) {
+      result[key] = 'deleted';
+    } else if (data1[key] !== data2[key]) {
+      result[key] = 'changed';
+    } else {
+      result[key] = 'unchanged';
+    }
+  }
+
+  return result;
 };
-
-console.log(genDiff(
-  { one: 'eon', two: 'two', four: true },
-  { two: 'own', zero: 4, four: true },
-));
-
-console.log(genDiff(
-  { a: 'a', b: 'b', c: 'c' },
-  { a: 'aa', d: 'dd' },
-));
-
-// {
-//   one: 'deleted',
-//   two: 'changed',
-//   four: 'unchanged',
-//   zero: 'added',
-// }
