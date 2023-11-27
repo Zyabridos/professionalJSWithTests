@@ -3,25 +3,39 @@ import {
   isFile, getChildren, isDirectory, getName, mkdir, mkfile,
 } from './VisualFileSystem/src/index.js';
 
-const getFilesCount = (node) => {
-  if (isFile(node)) {
-    return 1;
-  }
+const findEmptyDirPaths = (tree) => {
+  const ancestry = '';
+  // Внутренняя функция, которая может передавать аккумулятор
+  // В качестве аккумулятора выступает depth, переменная, содержащая текущую глубину
+  const iter = (node, hasItInFileName) => {
+    const name = getName(node);
+    const children = getChildren(node);
 
-  const children = getChildren(node);
-  const descendantCounts = children.map(getFilesCount);
-  return _.sum(descendantCounts);
-};
+    // Если директория пустая, то добавляем ее в список
+    if (isDirectory) {
+      if (name.includes(hasItInFileName)) {
+        ancestry.push(name);
+        return ancestry;
+      }
+    }
 
-const getSubdirectoriesInfo = (tree) => {
-  const children = getChildren(tree);
-  const result = children
-    // Нас интересуют только директории
-    .filter(isDirectory)
-    // Запускаем подсчёт для каждой директории
-    .map((child) => [getName(child), getFilesCount(child)]);
+    // Если это второй уровень вложенности, и директория не пустая
+    // то не имеет смысла смотреть дальше
+    // if (depth === 2) {
+    // Почему возвращается именно пустой массив?
+    // Потому что снаружи выполняется flat
+    // Он раскрывает пустые массивы
+    //   return [];
+    // }
 
-  return result;
+    // Оставляем только директории
+    return children.filter(isFile)
+      // Не забываем увеличивать глубину
+      .flatMap((child) => iter(child));
+  };
+
+  // Начинаем с глубины 0
+  return iter(tree, '');
 };
 
 const tree = mkdir('/', [
@@ -30,15 +44,13 @@ const tree = mkdir('/', [
     mkdir('nginx', [
       mkfile('nginx.conf'),
     ]),
+    mkdir('consul', [
+      mkfile('config.json'),
+      mkdir('data'),
+    ]),
   ]),
-  mkdir('consul', [
-    mkfile('config.json'),
-    mkfile('file.tmp'),
-    mkdir('data'),
-  ]),
+  mkdir('logs'),
   mkfile('hosts'),
-  mkfile('resolve'),
 ]);
 
-console.log(getSubdirectoriesInfo(tree));
-// => [['etc', 1], ['consul', 2]]
+console.log(findEmptyDirPaths(tree, '12')); // ['apache', 'data', 'logs']
