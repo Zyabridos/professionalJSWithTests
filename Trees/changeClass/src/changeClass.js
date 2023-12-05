@@ -1,60 +1,23 @@
-const changeClass = (node, oldValue, newValue) => {
-  const result = {};
-  const keys = Object.keys(node);
-  for (const key of keys) {
-    if (node.className === oldValue) {
-      result[key] = newValue;
-    } else if (typeof node.children === 'array') {
-      result[key] = changeClass(node[key], className, newValue);
+import _ from 'lodash';
+
+const changeClass = (tree, classNameFrom, classNameTo) => {
+  const innerFunc = (node) => {
+    const updatedNode = { ...node };
+
+    if (_.has(node, 'className')) {
+      const newClassName = classNameFrom === node.className ? classNameTo : node.className;
+      updatedNode.className = newClassName;
     }
-    // else {
-  //     result[key] = node[key];
-  //   }
-  }
-  return result;
+
+    if (node.type === 'tag-internal') {
+      const newChildren = node.children.map(innerFunc);
+      updatedNode.children = newChildren;
+    }
+
+    return updatedNode;
+  };
+
+  return innerFunc(tree);
 };
 
 export default changeClass;
-
-const tree = {
-  name: 'div',
-  type: 'tag-internal',
-  className: 'old-class',
-  children: [
-    {
-      name: 'div',
-      type: 'tag-internal',
-      className: 'old-class',
-      children: [],
-    },
-    {
-      name: 'div',
-      type: 'tag-internal',
-      className: 'old-class',
-      children: [],
-    },
-  ],
-};
-
-console.log(changeClass(tree, 'old-class', 'new-class'));
-console.log(tree.className);
-// Результат:
-// {
-//   name: 'div',
-//   type: 'tag-internal',
-//   className: 'hexlet-community',
-//   children: [
-//     {
-//       name: 'div',
-//       type: 'tag-internal',
-//       className: 'new-class',
-//       children: [],
-//     },
-//     {
-//       name: 'div',
-//       type: 'tag-internal',
-//       className: 'new-class',
-//       children: [],
-//     },
-//   ],
-// }
