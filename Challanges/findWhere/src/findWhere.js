@@ -1,6 +1,6 @@
-const findWhere = (array, keyWord) => {
-  const entries = Object.entries(keyWord);
-  const en = array[0];
+const findWhere = (array, searchedItem) => {
+  const searchedEntries = Object.entries(searchedItem);
+  return array[0].title;
 };
 
 console.log(findWhere(
@@ -14,3 +14,5 @@ console.log(findWhere(
   ],
   { author: 'Shakespeare', year: 1611 },
 )); // { title: 'Cymbeline', author: 'Shakespeare', year: 1611 }
+
+export default findWhere;

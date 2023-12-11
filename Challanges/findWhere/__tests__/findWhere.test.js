@@ -1,3 +1,5 @@
+import findWhere from '../src/findWhere.js';
+
 it('should wotk', () => {
   expect(findWhere(
     [
