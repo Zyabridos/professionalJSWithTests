@@ -1,4 +1,4 @@
-import Cart from '../Cart.js';
+import Cart from '../src/cart.js';
 
 test('Cart', () => {
   const cart = new Cart();

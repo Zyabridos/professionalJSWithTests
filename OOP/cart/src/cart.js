@@ -1,33 +1,24 @@
-class Cart { // имя класса - это имя функции конструктора
-  // Метод с именем constructor соответствует функции-конструктору
-  // Он вызывается, когда мы делаем new Company(name, email)
-  addItem(item, count) {
-    this.item = item;
-    this.count = count;
+import _ from 'lodash';
+
+export default class Cart {
+  constructor() {
+    this.items = [];
   }
 
-  // Это свойство getName с записанной в него обычной (function) функцией
-  // getName() {
-  //   return this.name;
-  // }
+  addItem(item, count) {
+    const items = this.getItems();
+    items.push({ item, count });
+  }
 
-  // getEmail() {
-  //   return this.email;
-  // }
+  getItems() {
+    return this.items;
+  }
 
-  // setEmail(email) {
-  //   this.email = email;
-  // }
+  getCount() {
+    return _.sumBy(this.getItems(), (goods) => goods.count);
+  }
+
+  getCost() {
+    return _.sumBy(this.getItems(), (goods) => goods.item.price * goods.count);
+  }
 }
-
-const cart = new Cart();
-console.log(cart);
-console.log(cart.addItem({ name: 'car', price: 3 }, 5));
-// // console.log(cart.addItem({ name: 'house', price: 10 }, 2));
-// console.log(cart.getItems().length); // 2
-// console.log(cart.getCost()); // 35
-// console.log(cart.getItems());
-// [
-//   { item: { name: 'car', price: 3 }, count: 5 },
-//   { item: { name: 'house', price: 10 }, count: 2 },
-// ]
