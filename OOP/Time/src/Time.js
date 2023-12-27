@@ -1,9 +1,10 @@
 // @ts-check
 
 export default class Time {
-  // BEGIN (write your solution here)
-
-  // END
+  static fromString(time) {
+    const [hours, minutes] = time.split(':');
+    return new Time(hours, minutes);
+  }
 
   constructor(hours, minutes) {
     this.minutes = minutes;
@@ -13,16 +14,8 @@ export default class Time {
   toString() {
     return `${this.hours}:${this.minutes}`;
   }
-
-  fromString(str) {
-    const hours = this.toString();
-    return hours + str;
-  }
 }
 
-const time = new Time(10, 15);
-// console.log(`The time is ${time}`); // => 'The time is 10:15'
-
-time.fromString('10:23');
-// автоматически вызывается метод toString()
-console.log(time); // 'The time is 10:23'
+// const time = Time.fromString('10:23');
+// // автоматически вызывается метод toString()
+// console.log(`The time is ${time}`); // 'The time is 10:23'

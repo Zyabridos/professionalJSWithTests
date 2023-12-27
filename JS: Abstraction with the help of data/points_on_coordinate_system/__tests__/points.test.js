@@ -1,4 +1,4 @@
-import calculateDistance from '../src/points.js';
+import calculateDistance from '../points.js';
 
 test('calculateDistance', () => {
   const point1 = [0, 0];

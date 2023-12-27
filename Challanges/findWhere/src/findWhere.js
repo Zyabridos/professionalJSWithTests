@@ -1,6 +1,9 @@
 const findWhere = (array, searchedItem) => {
+  const arrayEntries = Object.entries(array);
   const searchedEntries = Object.entries(searchedItem);
-  return array[0].title;
+  // return arrayEntries;
+  return searchedEntries[0][0];
+  // return array.map((current) => current.title);
 };
 
 console.log(findWhere(

@@ -1,29 +1,21 @@
-const group = {
-  names: ['Ivan', 'Igor'],
-  newName: 'Andrey',
-  changeNames() {
-    return this.names.map(() => this.newName);
-  },
-};
+class Money {
+  // Определение статического свойства
+  static rates = {
+    usd: {
+      eur: 0.7,
+    },
+    eur: {
+      usd: 1.2,
+    },
+  };
 
-console.log(group.changeNames());
+  // Определение статического метода
+  static setRate(from, to, value) {
+    this.rates[from][to] = value;
+  }
+}
 
-const objects = [
-  { name: 'Karl' },
-  { name: 'Mia' },
-];
-
-const printer = {
-  items: objects,
-  print() {
-    const current = this.items;
-    current.name.forEach(() => console.log(this.items));
-    // this.items.name.forEach(() => this.name.split('').reverse().join(''));
-  },
-};
-
-printer.print(); // [1]
-
-// each(objects, function callback() {
-//   this.name = this.name.split('').reverse().join('');
-// });
+// Использование ровно такое же как и в примерах выше
+console.log(Money.rates.usd.eur); // 0.7
+console.log(Money.setRate('usd', 'eur', 0.8));
+console.log(Money.rates.usd.eur); // 0.8
