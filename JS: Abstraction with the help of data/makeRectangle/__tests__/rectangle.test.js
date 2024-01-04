@@ -1,7 +1,5 @@
-// @ts-check
-// eslint-disable-next-line
-import * as rect from '../rectangle.js';
-import { makeDecartPoint, getX, getY } from '../points.js'; // eslint-disable-line
+import * as rect from '../src/rectangle.js';
+import { makeDecartPoint, getX, getY } from '../src/points.js';
 
 test('rectangle1', () => {
   const p = makeDecartPoint(0, 1);
