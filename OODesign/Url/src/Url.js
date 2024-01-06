@@ -32,22 +32,3 @@ export default class Url {
     return this.urlAdress === urlToCompare.urlAdress;
   }
 }
-
-// const urL = new URL('https://example.com/?name=Jonathan%20Smith&age=18');
-// console.log(urL.searchParams);
-
-const url = new Url('http://yandex.ru:80?key=value&key2=value2');
-// console.log(url.getScheme()); // 'http'
-// console.log(url.getHostName()); // 'yandex.ru'
-console.log(url.getQueryParams());
-// {
-//   key: 'value',
-//   key2: 'value2',
-// };
-console.log(url.getQueryParam('key')); // 'value'
-// // второй параметр - значение по умолчанию
-console.log(url.getQueryParam('key2', 'lala')); // 'value2'
-console.log(url.getQueryParam('new', 'ehu')); // 'ehu'
-console.log(url.getQueryParam('new')); // null
-// console.log(url.equals(new Url('http://yandex.ru:80?key=value&key2=value2'))); // true
-// console.log(url.equals(new Url('http://yandex.ru:80?key=value'))); // false
