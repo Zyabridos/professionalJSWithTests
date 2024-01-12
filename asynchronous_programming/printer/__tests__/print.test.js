@@ -12,11 +12,11 @@ test('readFile', () => {
     results.push(...args);
     log(...args);
   });
-  print('__tests__/printer.test.js');
+  print('__tests__/print.test.js');
 
   return new Promise((done) => {
     setTimeout(() => {
-      const expected = [fs.readFileSync('__tests__/printer.test.js', 'utf-8')];
+      const expected = [fs.readFileSync('__tests__/print.test.js', 'utf-8')];
       expect(results).toEqual(expected);
       done();
     }, 2000);
