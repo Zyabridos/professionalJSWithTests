@@ -1,10 +1,39 @@
-const data = [16, 64, 4];
-const data2 = data.map(Math.sqrt); // [4, 8, 2]
-const predicate = (v) => unknown > 2;
+const write = (filepath, content, cb) => {
+  fs.writeFile(filepath, content, (err, data) => {
+    if (err) throw err;
+    cb(null, data);
+  });
+};
 
-try {
-  const data3 = data2.filter(predicate); // ReferenceError
-} catch (e) {
-  console.log('Catch it');
-  console.log(e.stack);
+const printer = {
+  items: [1],
+  print() { // важно что внешняя функция имеет контекст
+    // Стрелочная функция определяется внутри функции print,
+    // но вызывается внутри метода forEach
+    this.items.forEach(() => console.log(this.items));
+  },
+};
+
+function each(obj, cb) {
+  iter(obj, (err, data) => {
+    cb(null, data);
+  });
+  // return this.obj.forEach(cb);
 }
+
+printer.print(); // [1]
+
+const objects = [
+  { name: 'Karl' },
+  { name: 'Mia' },
+];
+
+// each(objects, function callback() {
+//   this.name = this.name.split('').reverse().join('');
+// });
+
+console.log(objects);
+// [
+//   { name: 'lraK' },
+//   { name: 'aiM' },
+// ];

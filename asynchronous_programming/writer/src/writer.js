@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 
 const write = (filepath, content, cb) => {
-  fs.writeFile(filepath, content, (_err, data) => {
+  fs.writeFile(filepath, content, (err, data) => {
+    if (err) throw err;
     cb(null, data);
   });
 };

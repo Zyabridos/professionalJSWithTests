@@ -1,6 +1,6 @@
 // @ts-check
 
-import findWhere from '../arrays.js';
+import findWhere from '../src/findWhere.js';
 
 test('testFindWhere', () => {
   const data = [
