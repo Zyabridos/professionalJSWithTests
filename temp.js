@@ -1,39 +1,35 @@
-const write = (filepath, content, cb) => {
-  fs.writeFile(filepath, content, (err, data) => {
-    if (err) throw err;
-    cb(null, data);
+import * as fs from 'fs';
+
+const unionFiles = (inputPath1, inputPath2, outputPath, cb) => {
+  fs.readFile(inputPath1, 'utf-8', (error1, data1) => {
+    if (error1) {
+      cb(error1);
+      return;
+    }
+    fs.readFile(inputPath2, 'utf-8', (error2, data2) => {
+      if (error2) {
+        cb(error2);
+        return;
+      }
+      fs.writeFile(outputPath, `${data1}${data2}`, (error3) => {
+        if (error3) {
+          cb(error3);
+          return;
+        }
+        cb(null); // не забываем последний успешный вызов
+      });
+    });
   });
 };
 
-const printer = {
-  items: [1],
-  print() { // важно что внешняя функция имеет контекст
-    // Стрелочная функция определяется внутри функции print,
-    // но вызывается внутри метода forEach
-    this.items.forEach(() => console.log(this.items));
-  },
-};
+unionFiles('./myfile', './fileCopy', './unitedFile.txt', (err, data) => {
+  // Любые ошибки чтения файла: доступ, отсутствие файла, директория вместо файла
+  // null неявно приводится к false, поэтому достаточно такой проверки,
+  // любой другой ответ трактуется как true
+  if (err) {
+    console.log('error!');
+    return; // guard expression
+  }
 
-function each(obj, cb) {
-  iter(obj, (err, data) => {
-    cb(null, data);
-  });
-  // return this.obj.forEach(cb);
-}
-
-printer.print(); // [1]
-
-const objects = [
-  { name: 'Karl' },
-  { name: 'Mia' },
-];
-
-// each(objects, function callback() {
-//   this.name = this.name.split('').reverse().join('');
-// });
-
-console.log(objects);
-// [
-//   { name: 'lraK' },
-//   { name: 'aiM' },
-// ];
+  console.log('finished!');
+});
