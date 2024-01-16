@@ -1,69 +1,42 @@
-// import path from 'path';
-import * as fs from 'fs';
+import path from 'path';
+import fs from 'fs';
 import _ from 'lodash';
 import async from 'async';
 
-function getFileSizeInBytes(file, callback) {
-  fs.stat(file, (err, stat) => {
-    if (err) {
-      return callback(err);
+const getDirectorySize = (dirPath, cb) => {
+  // читаем содержимое переданной папки dirPath
+  // readdir принимает вторым аргументом колбэк с двумя аргументами
+  // второй аргумент колбэка, fileNames, - это массив имен файлов и папок
+  fs.readdir(dirPath, (error1, fileNames) => {
+    // первым делом обрабатываем ошибку - передаем ошибку в колбэк cb,
+    // опуская 2-й аргумент, хотя допустимо туда явно передавать null,
+    // а из самой функции выходим через return
+    if (error1) {
+      cb(error1);
+      return;
     }
-    callback(null, stat.size);
-  });
-}
-
-function isFile(file, callback) {
-  fs.stat(file, (err, stat) => {
-    if (err) {
-      return callback(err);
-    }
-    callback(null, stat.isFile());
-  });
-}
-
-const state = {
-  count: 0,
-  filesNames: [],
-};
-
-// fs.readFile('./second', 'utf-8', (_error2, data2) => {
-//   state.count += 1;
-//   state.results[1] = data2;
-// });
-
-const getDirectorySize = (path, cb) => {
-  // fs.stat(path, (_error1, file) => {
-  //   state.count += 1;
-  //   state.filesNames.push(file);
-  // });
-
-  // const pathsToCheck = state.filesNames;
-
-  // for (let i = 0; i < pathsToCheck.length; i += 1) {
-  //   fs.stat(pathsToCheck[i], (err, stats) => {
-  //     if (stats.isFile() === false) {
-  //       stats.pop(pathsToCheck[i]);
-  //     }
-  //     console.log(state);
-  //   });
-  // }
-  fs.readdir(path, (error1, file) => {
-    async.map(file, isFile, (err, res) => {
-      // res.pop(isFile === false);
-      console.log(res);
-      if (error1) { console.log(error1); } else {
-        async.map(file, getFileSizeInBytes, (error2, sizes) => {
-          if (error2) {
-            console.log(error2);
-          } else {
-            console.log(_.sumBy(sizes));
-          }
-        });
+    // если ошибки нет - работаем
+    // собираем путь к каждому файлу, синхронная функция
+    const filePaths = fileNames.map((name) => path.join(dirPath, name));
+    // теперь извлекаем информацию о каждом файле/папке
+    // при помощи асинхронной функции fs.stat
+    // она тоже принимает вторым аргументом колбэк с двумя аргументами
+    async.map(filePaths, fs.stat, (error2, stats) => {
+      // точно так же обрабатываем ошибку
+      if (error2) {
+        cb(error2);
+        return;
       }
+      // если ошибок нет, мы работаем с массивом stats -
+      // результатом применения fs.stat к каждому элементу массива filePaths
+      // в _.sumBy() передаем массив отфильтрованных файлов первым аргументом,
+      // ведь поддиректории мы тут не учитываем,
+      // а вторым - имя свойства, по которому осуществляем сложение,
+      const sum = _.sumBy(stats.filter((stat) => stat.isFile()), 'size');
+      // передаем результат во второй параметр колбэка
+      cb(null, sum);
     });
   });
 };
 
-getDirectorySize('./', (err, size) => {
-  console.log(size);
-});
+export default getDirectorySize;
