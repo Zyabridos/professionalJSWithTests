@@ -1,20 +1,25 @@
+import * as fs from 'fs';
 import fsp from 'fs/promises';
 
-const getTypes = (filePaths) => {
-  const initPromise = Promise.resolve([]);
+const initPromise = Promise.resolve([]);
 
-  const promise = filePaths.reduce((acc, path) => {
-    const newAcc = acc.then((contents) => fsp.readFile(path, 'utf-8').then((data) => contents.concat(data)));
-    return newAcc;
-  }, initPromise);
-  return promise;
-};
+// export const reverse = (src) => fsp.readFile(src, 'utf-8')
+//   .then((content) => reverseString(content))
+//   .then((content) => fsp.writeFile(src, content));
 
-const filepaths = ['/myfile'];
-const promises = filepaths.map((filepath) => fsp.readFile(filepath, 'utf-8'));
-const promise = Promise.all(promises);
+export const getTypes = (filePaths) => filePaths.reduce((acc, path) => {
+  const newAcc = acc.then((contents) => fsp.stat(path).then((data) => contents.concat(data)));
+  return newAcc;
+}, initPromise);
 
-promise.then((contents) => contents.map(console.log));
+// for (let i = 0; i < pathsToCheck.length; i++) {
+//   stat(pathsToCheck[i], (err, stats) => {
+//     console.log(stats.isDirectory());
+//     console.log(stats);
+//   });
+// }
 
-// console.log(getTypes(['./myfile']));
-// // ['directory', 'file', null]
+// const getTypes = (filePaths) => fsp.stat(filePaths[0]);
+
+getTypes(['./myfile', 'fileCopy']).then(console.log);
+// ['file']
