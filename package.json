@@ -14,6 +14,8 @@
   "homepage": "https://github.com/Zyabridos/professionalJS#readme",
   "dependencies": {
     "@jest/globals": "^29.7.0",
+    "async": "^3.2.5",
+    "axios": "^1.6.5",
     "crc32": "^0.2.2",
     "eslint-config-airbnb-base": "^15.0.0",
     "lodash": "^4.17.21",

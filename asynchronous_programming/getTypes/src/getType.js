@@ -2,15 +2,19 @@ import fsp from 'fs/promises';
 
 const initPromise = Promise.resolve([]);
 
-// export const reverse = (src) => fsp.readFile(src, 'utf-8')
-//   .then((content) => reverseString(content))
-//   .then((content) => fsp.writeFile(src, content));
-
-const getTypes = (paths) => {
+const unionFiles = (inputPath1, inputPath2, outputPath) => {
+  const result = fsp.readFile(inputPath1, 'utf-8')
+    .then((data1) => {
+      const promise = fsp.readFile(inputPath2, 'utf-8')
+        .then((data2) => fsp.writeFile(outputPath, `${data1}${data2}`));
+    });
+  return result;
+};
+const getTypes = (filepaths) => {
 
 };
 
 // const getTypes = (filePaths) => fsp.stat(filePaths[0]);
 
-getTypes(['./myfile']).then(console.log);
+console.log(getTypes(['./']));
 // ['file']
