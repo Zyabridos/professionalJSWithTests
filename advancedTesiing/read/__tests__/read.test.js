@@ -1,18 +1,14 @@
-import getFunction from '../src/read.js';
+// @ts-check
+
+import getFunction from '../functions.js';
 
 const read = getFunction();
 
-function drinkFlavor(flavor) {
-  if (flavor === 'octopus') {
-    throw new DisgustingFlavorError('yuck, octopus flavor');
-  }
-  // Do some other stuff
-}
-
-test('throws on nonexisting path', () => {
-  function nonexistingPath() {
-    getFunction('octopus');
-  }
-
-  expect(nonexistingPath).toThrow();
+test('boom!', () => {
+  expect(() => {
+    read('/undefined');
+  }).toThrow();
+  expect(() => {
+    read('/etc');
+  }).toThrow();
 });
