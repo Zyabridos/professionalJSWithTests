@@ -12,10 +12,12 @@ const getDirectorySize = (dirpath) => {
 };
 
 const getTypes = (filepaths) => {
-  
+  const promise = fsp.readdir(filepaths).then((dirOrFileName) => {
+    dirOrFileName.map((current) => fsPromise.stat(current));
+  })
 };
 
 // const getTypes = (filePaths) => fsp.stat(filePaths[0]);
 
-console.log(getTypes(['./']));
+getTypes(['./']).then(console.log);
 // ['file']

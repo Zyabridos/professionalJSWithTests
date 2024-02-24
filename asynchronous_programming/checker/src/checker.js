@@ -1,11 +1,6 @@
 import { URL } from 'url';
 import axios from 'axios';
 
-const getBadLinks = async (url) => {
-  const response = await axios.get(url);
-  return response.status;
-};
-
 const extractLinks = (content) => {
   const host = 'http://localhost:8080';
   const linkRx = /href="(.+?)"/ig;
@@ -14,7 +9,26 @@ const extractLinks = (content) => {
     .map((rawLink) => new URL(rawLink, host).toString());
 };
 
-const url = 'https://privet.hexlet';
-const url2 = 'https://ru.hexlet.io';
-const links = await getBadLinks(url);
-console.log(links);
+const fn = async () => {
+  // GET-запрос сайта Хекслета
+  const response = await axios.get('https://ru.hexlet.io');
+  console.log(response.status); // код ответа
+}
+
+const getBadLinks = async (initialLink) => {
+  // запрашиваем страницу по ссылке
+  const response = await axios.get(initialLink);
+  // извлекаем массив всех ссылок на странице
+  const links = extractLinks(response.data);
+  // функция, возвращающая ссылку, если запрос по ней оказался неудачным
+  // при удачном запросе она возвращает null
+  const request = (link) => axios.get(link).then(() => null).catch(() => link);
+  // Отправляем запросы ко всем ссылкам
+  const promises = links.map(request);
+  // Получаем массив, состоящий из битых ссылок и значений null
+  const results = await Promise.all(promises);
+  // отсеиваем null
+  return results.filter((result) => result !== null);
+};
+
+export default getBadLinks;
