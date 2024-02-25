@@ -1,23 +1,20 @@
 import fsp from 'fs/promises';
+import _ from 'lodash';
 
-const initPromise = Promise.resolve([]);
+const getTypeName = (stat) => (stat.isDirectory() ? 'directory' : 'file');
 
-const getDirectorySize = (dirpath) => {
-  const promise = fsp.readdir(dirpath).then((filenames) => {
-    const filepaths = filenames.map((name) => path.join(dirpath, name));
-    const promises = filepaths.map((filePath) => fsp.stat(filePath));
-    return Promise.all(promises);
-  });
-  return promise.then((stats) => _.sumBy(stats.filter((stat) => stat.isFile()), 'size'));
+export const getTypes = (filesPath) => {
+  // функция получает путь и аккумулятор из reduce, выполняет попытку получить stat,
+  // добавляет в аккумулятор строку или null и возвращает обновлённый аккумулятор
+  const processPath = (filepath, result) => fsp.stat(filepath)
+    .then((data) => [...result, getTypeName(data)])
+    .catch(() => [...result, null]);
+
+  const resultPromise = filesPath.reduce(
+    // promise - это аккумулятор, обёрнутый в промис, поэтому на нём вызывается then
+    // result - предыдущее значение аккумулятора
+    (promise, filepath) => promise.then((result) => processPath(filepath, result)),
+    Promise.resolve([]),
+  );
+  return resultPromise;
 };
-
-const getTypes = (filepaths) => {
-  const promise = fsp.readdir(filepaths).then((dirOrFileName) => {
-    dirOrFileName.map((current) => fsPromise.stat(current));
-  })
-};
-
-// const getTypes = (filePaths) => fsp.stat(filePaths[0]);
-
-getTypes(['./']).then(console.log);
-// ['file']

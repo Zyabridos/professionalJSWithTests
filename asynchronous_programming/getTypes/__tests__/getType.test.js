@@ -1,6 +1,6 @@
 // @ts-check
 
-import getTypes from '../src/getType.js'
+import { getTypes } from '../src/getType.js';
 
 test('getTypes 1', () => {
   const actual = getTypes(['undefined']);
