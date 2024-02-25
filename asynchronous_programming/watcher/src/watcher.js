@@ -1,19 +1,30 @@
-import * as fs from 'fs';
+// @ts-check
+import fs from 'fs';
 
-const watch = (filepath, timer, cb) => {
-
+export default (filepath, period, cb) => {
+  // фиксируем время последней проверки - момент запуска функции
+  let lastCheckTime = Date.now();
+  // функция проверки файла
+  const check = (timerId) => {
+    fs.stat(filepath, (err, stats) => {
+      // в случае ошибки отключаем таймер
+      // и отдаем в колбэк ошибку
+      if (err) {
+        clearInterval(timerId);
+        cb(err);
+        return;
+      }
+      // извлекаем время последней модификации файла
+      const { mtimeMs } = stats;
+      // если файл был модифицирован после запуска функции,
+      // вызываем колбэк и меняем время последней проверки
+      if (mtimeMs > lastCheckTime) {
+        cb(null);
+        lastCheckTime = mtimeMs;
+      }
+    });
+  };
+  // создаем таймер и передаем его id в функцию проверки файла
+  const timerId = setInterval(() => check(timerId), period);
+  return timerId;
 };
-
-const write = (filepath, content, cb) => {
-  fs.writeFile(filepath, content, (err, data) => {
-    if (err) throw err;
-    cb(null, data);
-  });
-};
-
-const id = watch(filepath, 500, (err) => {
-  console.log('Wow!');
-});
-
-setTimeout(() => fs.appendFileSync(filepath, 'ehu'), 700);
-setTimeout(() => clearInterval(id), 5000); // остановить отслеживание через 5 секунд
