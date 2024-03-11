@@ -1,6 +1,6 @@
 // @ts-check
 
-import prettify from './src/prettify.js';
+import prettify from '../src/prettify.js';
 
 test('prettify paragraph', () => {
   const expected = '<p>Text</p>';
