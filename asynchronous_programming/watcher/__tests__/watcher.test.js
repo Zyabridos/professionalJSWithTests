@@ -5,7 +5,7 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
-import watch from '../watcher.js';
+import watch from '../src/watcher.js';
 
 const buildFilePath = (n) => path.join(os.tmpdir(), `example-2-${n}`);
 const prepareFileSync = (n) => {
